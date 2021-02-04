@@ -1,23 +1,19 @@
 package com.example.app_check
 
 import android.app.Activity
-import android.app.AppOpsManager
 import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.Process
+import android.os.IBinder
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -53,6 +49,8 @@ class AppCheckPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
   override fun onDetachedFromActivity() {}
 
+
+
   @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     when(call.method) {
@@ -68,8 +66,19 @@ class AppCheckPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "getTopApp" -> {
         result.success(RunningTaskUtil(context).getTopRunningTasks()?.packageName)
       }
-      "getPr" -> {
+      "checkPermission" -> {
         result.success(checkPermission())
+      }
+      "startListen" -> {
+        result.success(true)
+        val intent = Intent(context, ListenerService::class.java)
+        intent.putExtra("argument", call.arguments as ArrayList<String>)
+        context.startService(intent)
+      }
+      "endListen" -> {
+        result.success(false)
+        val intent = Intent(context, ListenerService::class.java)
+        context.stopService(intent)
       }
       else -> {
         result.notImplemented()

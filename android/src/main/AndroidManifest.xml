@@ -3,4 +3,12 @@
     package="com.example.app_check">
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+
+    <application>
+        <service
+            android:name=".ListenerService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
+    </application>
 </manifest>

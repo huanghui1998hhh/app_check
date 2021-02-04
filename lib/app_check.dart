@@ -29,7 +29,31 @@ class AppCheck {
     return _topApp;
   }
 
-  static Future getPr() async {
-    await _channel.invokeMethod('getPr');
+  static Future checkPermission() async {
+    await _channel.invokeMethod('checkPermission');
+  }
+
+  static Future<bool> startListen(List<String> _whiteList) async {
+    return await _channel.invokeMethod('startListen', _whiteList);
+  }
+
+  static Future<bool> endListen() async {
+    return await _channel.invokeMethod('endListen');
+  }
+
+  static void callbacks(Function callbackOn, Function callbackOff) {
+    // ignore: missing_return
+    _channel.setMethodCallHandler((call) {
+      switch (call.method) {
+        case "callbackOn":
+          callbackOn();
+          break;
+        case "callbackOff":
+          callbackOff();
+          break;
+        default:
+          return null;
+      }
+    });
   }
 }

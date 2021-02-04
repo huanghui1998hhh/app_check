@@ -59,13 +59,25 @@ class _MyAppState extends State<MyApp> {
             Text(_appList.toString()),
             Text(_topApp ?? "null"),
             RaisedButton(onPressed: () async {
-              _topApp = await AppCheck.topApp;
-              setState(() {});
+              await Future.delayed(Duration(seconds: 3), () async {
+                print(await AppCheck.topApp);
+              });
             }),
             SizedBox(height: 20),
             RaisedButton(onPressed: () async {
-              await AppCheck.getPr();
+              await AppCheck.checkPermission();
             }),
+            RaisedButton(onPressed: () async {
+              AppCheck.callbacks(() {
+                print("开");
+              }, () {
+                print("关");
+              });
+              await AppCheck.startListen(['gg.op.lol.android']);
+            }),
+            RaisedButton(onPressed: () async {
+              await AppCheck.endListen();
+            })
           ],
         ),
       ),
