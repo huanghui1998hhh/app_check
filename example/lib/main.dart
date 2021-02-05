@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
             }),
             SizedBox(height: 20),
             RaisedButton(onPressed: () async {
-              await AppCheck.checkPermission();
+              await AppCheck.checkAppPermission();
             }),
             RaisedButton(onPressed: () async {
               AppCheck.callbacks(() {
@@ -73,7 +73,8 @@ class _MyAppState extends State<MyApp> {
               }, () {
                 print("关");
               });
-              await AppCheck.startListen(['gg.op.lol.android']);
+              await AppCheck.startListen(
+                  ['gg.op.lol.android', 'com.miui.home']);
             }),
             RaisedButton(onPressed: () async {
               await AppCheck.endListen();

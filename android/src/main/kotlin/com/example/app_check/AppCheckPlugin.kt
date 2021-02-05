@@ -66,8 +66,8 @@ class AppCheckPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       "getTopApp" -> {
         result.success(RunningTaskUtil(context).getTopRunningTasks()?.packageName)
       }
-      "checkPermission" -> {
-        result.success(checkPermission())
+      "checkAppPermission" -> {
+        result.success(checkAppPermission())
       }
       "startListen" -> {
         result.success(true)
@@ -86,23 +86,14 @@ class AppCheckPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     }
   }
 
-  private fun checkPermission(): Boolean {
+  private fun checkAppPermission(): Boolean {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (!Settings.canDrawOverlays(context)) {
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
           intent.data = Uri.fromParts("package", context.packageName, null)
         }
-        if (activity == null) {
-          if (context != null) {
-            activity!!.startActivity(intent)
-            Toast.makeText(context, "Please grant, Can Draw Over Other Apps permission.", Toast.LENGTH_SHORT).show()
-          } else {
-            Toast.makeText(context, "Can Draw Over Other Apps permission is required. Please grant it from the app settings", Toast.LENGTH_LONG).show()
-          }
-        } else {
-          activity!!.startActivityForResult(intent, MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS)
-        }
+        activity.startActivityForResult(intent, MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS)
       } else {
         return true
       }

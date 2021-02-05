@@ -29,8 +29,8 @@ class AppCheck {
     return _topApp;
   }
 
-  static Future checkPermission() async {
-    await _channel.invokeMethod('checkPermission');
+  static Future checkAppPermission() async {
+    await _channel.invokeMethod('checkAppPermission');
   }
 
   static Future<bool> startListen(List<String> _whiteList) async {
